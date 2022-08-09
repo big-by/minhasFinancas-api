@@ -54,7 +54,7 @@ public class UsuarioRepositoryTest {
 		
 		Usuario usuarioSalvo = repository.save(usuario);
 		
-		Assertions.assertThat(usuarioSalvo.getIdLong()).isNotNull();
+		Assertions.assertThat(usuarioSalvo.getId()).isNotNull();
 		
 	}
 	

@@ -51,8 +51,8 @@ public class UsuarioServiceTest {
 	public void testarAutenticarUsuarioComSucesso() {
 		String email = "email@email.com";
 		String senha = "senha";
-		
-		Usuario usuario = Usuario.builder().email(email).senha(senha).idLong(1L).build();
+	
+		Usuario usuario = Usuario.builder().email(email).senha(senha).id(1L).build();
 		Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(usuario));
 		
 		Usuario result = service.autenticar(email, senha);
@@ -68,14 +68,14 @@ public class UsuarioServiceTest {
 		String senha = "senha";
 		String nome = "Nome";
 		
-		Usuario usuario = Usuario.builder().nome(nome).email(email).senha(senha).idLong(1L).build();
+		Usuario usuario = Usuario.builder().nome(nome).email(email).senha(senha).id(1L).build();
 		
 		Mockito.when(repository.save(Mockito.any(Usuario.class))).thenReturn(usuario);
 		
 		Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
 		
 		Assertions.assertThat(usuarioSalvo).isNotNull();
-		Assertions.assertThat(usuarioSalvo.getIdLong()).isEqualTo(1L);
+		Assertions.assertThat(usuarioSalvo.getId()).isEqualTo(1L);
 		Assertions.assertThat(usuarioSalvo.getNome()).isEqualTo(nome);
 		Assertions.assertThat(usuarioSalvo.getEmail()).isEqualTo(email);
 		Assertions.assertThat(usuarioSalvo.getSenha()).isEqualTo(senha);
