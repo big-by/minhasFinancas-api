@@ -34,6 +34,8 @@ public class UsuarioControllerTest {
 	static final String API = "/api/usuarios";
 	static final MediaType JSON = MediaType.APPLICATION_JSON;
 
+	//Teste commit
+
 	@Autowired
 	MockMvc mvc;
 
