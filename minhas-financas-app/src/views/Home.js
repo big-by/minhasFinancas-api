@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { PainelCentral } from '../components/PainelCentral'
+import axios from 'axios';
 
 //import UsuarioService from '../app/service/usuarioService'
 //import { AuthContext } from '../main/provedorAutenticacao'
@@ -15,17 +16,30 @@ class Home extends Component {
 		//this.usuarioService = new UsuarioService();
 	}
 
-	/*componentDidMount(){
-			const usuarioLogado = this.context.usuarioAutenticado
+	componentDidMount() {
+		const usuarioLogado = JSON.parse(
+			localStorage.getItem('_usuario_logado')
+		);
+		const URL = `http://localhost:8080/api/usuarios/${usuarioLogado.id}/saldo`;
 
-			this.usuarioService
-					.obterSaldoPorUsuario(usuarioLogado.id)
-					.then( response => {
-							this.setState({ saldo: response.data})
-					}).catch(error => {
-							console.error(error.response)
-					});
-	}*/
+		axios.get(URL)
+			.then(response => {
+				this.setState({
+					saldo: response.data
+				})
+			}).catch(error => {
+				console.error(error.response)
+			});
+		/*const usuarioLogado = this.context.usuarioAutenticado
+
+		this.usuarioService
+				.obterSaldoPorUsuario(usuarioLogado.id)
+				.then( response => {
+						this.setState({ saldo: response.data})
+				}).catch(error => {
+						console.error(error.response)
+				});*/
+	}
 
 	render() {
 		return (

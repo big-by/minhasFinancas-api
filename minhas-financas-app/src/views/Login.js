@@ -5,32 +5,53 @@ import FormGroup from "../components/FormGroup";
 import Row from "../components/Grid/Row";
 import { PainelCentral } from "../components/PainelCentral";
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class Login extends Component {
 
 	constructor() {
 		super();
 		this.state = {
-			email: null,
-			senha: null
+			usuario: {
+				email: '',
+				senha: ''
+			},
+			mensagemErro: null,
 		}
 		//this.service = new UsuarioService();
 	}
 
 	onChangeEmail = (event) => {
 		this.setState({
-			email: event.target.value
+			usuario: {
+				...this.state.usuario,
+				email: event.target.value
+			}
 		});
 	}
 
 	onChangeSenha = (event) => {
 		this.setState({
-			senha: event.target.value
+			usuario: {
+				...this.state.usuario,
+				senha: event.target.value
+			}
 		});
 	}
 
-	/*entrar = () => {
-		this.service.autenticar({
+	entrar = () => {
+		const URL = 'http://localhost:8080/api/usuarios/login';
+
+		axios.post(URL, this.state.usuario)
+			.then(response => {
+				localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
+				this.props.history.push('/home');
+			}).catch(erro => {
+				this.setState({
+					mensagemErro: erro.response.data
+				})
+			});
+		/*this.service.autenticar({
 			email: this.state.email,
 			senha: this.state.senha
 		}).then( response => {
@@ -38,8 +59,8 @@ class Login extends Component {
 			this.props.history.push('/home')
 		}).catch( erro => {
 			mensagemErro(erro.response.data)
-		})
-	}*/
+		})*/
+	}
 
 	prepareCadastrar = () => {
 		this.props.history.push('/cadastro')
@@ -53,12 +74,17 @@ class Login extends Component {
 						<div className="bs-docs-section">
 							<Card title="Login">
 								<Row>
+									<Col6>
+										<span>{this.state.mensagemErro}</span>
+									</Col6>
+								</Row>
+								<Row>
 									<Col12>
 										<div className="bs-component">
 											<fieldset>
 												<FormGroup label="Email: *" htmlFor="exampleInputEmail1">
 													<input type="email"
-														value={this.state.email}
+														value={this.state.usuario.email}
 														onChange={this.onChangeEmail}
 														className="form-control"
 														id="exampleInputEmail1"
@@ -67,7 +93,7 @@ class Login extends Component {
 												</FormGroup>
 												<FormGroup label="Senha: *" htmlFor="exampleInputPassword1">
 													<input type="password"
-														value={this.state.senha}
+														value={this.state.usuario.senha}
 														onChange={this.onChangeSenha}
 														className="form-control"
 														id="exampleInputPassword1"
