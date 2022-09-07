@@ -5,7 +5,7 @@ import FormGroup from "../components/FormGroup";
 import Row from "../components/Grid/Row";
 import { PainelCentral } from "../components/PainelCentral";
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import UsuarioService from "../app/service/usuarioService";
 
 class Login extends Component {
 
@@ -18,7 +18,7 @@ class Login extends Component {
 			},
 			mensagemErro: null,
 		}
-		//this.service = new UsuarioService();
+		this.service = new UsuarioService();
 	}
 
 	onChangeEmail = (event) => {
@@ -40,17 +40,16 @@ class Login extends Component {
 	}
 
 	entrar = () => {
-		const URL = 'http://localhost:8080/api/usuarios/login';
+		this.service.autenticar(this.state.usuario
+		).then(response => {
 
-		axios.post(URL, this.state.usuario)
-			.then(response => {
-				localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
-				this.props.history.push('/home');
-			}).catch(erro => {
-				this.setState({
-					mensagemErro: erro.response.data
-				})
-			});
+			localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
+			this.props.history.push('/home');
+		}).catch(erro => {
+			this.setState({
+				mensagemErro: erro.response.data
+			})
+		});
 		/*this.service.autenticar({
 			email: this.state.email,
 			senha: this.state.senha
@@ -75,7 +74,11 @@ class Login extends Component {
 							<Card title="Login">
 								<Row>
 									<Col6>
-										<span>{this.state.mensagemErro}</span>
+										{this.state.mensagemErro &&
+											<div className="alert alert-dismissible alert-danger">
+												<button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+												<strong>{this.state.mensagemErro}</strong>
+											</div>}
 									</Col6>
 								</Row>
 								<Row>

@@ -5,6 +5,7 @@ import { Col12 } from "../components/Grid/Col";
 import Row from "../components/Grid/Row";
 import { PainelCentral } from "../components/PainelCentral";
 import { withRouter } from 'react-router-dom';
+import UsuarioService from "../app/service/usuarioService";
 
 
 class CadastroUsuarios extends Component {
@@ -15,7 +16,9 @@ class CadastroUsuarios extends Component {
 			email: null,
 			senha: null,
 			senhaRepetida: null,
+			mensagem: null,
 		}
+		this.service = new UsuarioService()
 	}
 
 	onChange = (event, campo) => {
@@ -24,27 +27,31 @@ class CadastroUsuarios extends Component {
 		})
 	}
 
-	/*cadastrar = () => {
+	cadastrar = () => {
 
 		const { nome, email, senha, senhaRepeticao } = this.state
 		const usuario = { nome, email, senha, senhaRepeticao }
 
-		try {
+		/*try {
 			this.service.validar(usuario);
 		} catch (erro) {
 			const msgs = erro.mensagens;
 			msgs.forEach(msg => mensagemErro(msg));
 			return false;
-		}
+		}*/
 
-		this.service.salvar(usuario)
+		this.service.salvar({ email, nome, senha })
 			.then(response => {
-				mensagemSucesso('Usuário cadastrado com sucesso! Faça o login para acessar o sistema.')
+				this.setState({
+					mensagem: 'Usuário cadastrado com sucesso! Faça o login para acessar o sistema.'
+				});
 				this.props.history.push('/login')
 			}).catch(error => {
-				mensagemErro(error.response.data)
+				this.setState({
+					mensagem: error.response.data
+				});
 			})
-	}*/
+	}
 
 	cancelar = () => {
 		this.props.history.push('/login')

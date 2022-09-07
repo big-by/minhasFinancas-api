@@ -64,7 +64,7 @@ public class UsuarioController {
 		
 	}
 	
-	@GetMapping("{id}/saldo")
+	@GetMapping("/{id}/saldo")
 	public ResponseEntity obterSaldo( @PathVariable("id") Long id ) {
 		Optional<Usuario> usuario = service.obterPorId(id);
 		
